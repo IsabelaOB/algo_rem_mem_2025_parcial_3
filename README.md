@@ -54,4 +54,16 @@ Req: 0xf1 Direccion Fisica: 0x1ff Acción: Segmention Fault
 
 ## Autor.
 
- * Nombre completo:
+ * Nombre completo: ISABELA OSORIO BOTERO
+
+
+
+Este script simula la traducción de direcciones virtuales a direcciones físicas en un sistema con segmentación y paginación. El sistema maneja direcciones de 8 bits y páginas de 16 bytes. La memoria física tiene un número limitado de marcos, y el programa asigna marcos libres o reemplaza marcos ya asignados usando una política FIFO si no hay marcos disponibles.
+
+Cuando llega una referencia de memoria virtual, primero se revisa a qué segmento pertenece, verificando si la dirección está dentro de los límites de uno de los segmentos definidos: .text, .data, .heap o .stack. Si la dirección no pertenece a ninguno de estos segmentos, el programa genera un Segmentation Fault y asigna la dirección física 0x1FF.
+
+Si la dirección es válida, se calcula el número de página dentro del segmento y el desplazamiento. A partir de ahí, se verifica si esa página ya tiene un marco asignado. Si es así, se reutiliza ese marco. Si no hay marco asignado, el sistema intenta asignar un marco libre. Si todos los marcos están ocupados, se reemplaza el marco más antiguo utilizando una política FIFO.
+
+Por ejemplo, si la dirección 0x64 es solicitada, primero se determina que pertenece al segmento .data (porque está dentro del rango 0x40 a 0x68). Luego, se calcula el número de página y el desplazamiento. Si hay un marco libre, se asigna y la dirección física se calcula multiplicando el marco por el tamaño de la página (16) y sumando el desplazamiento. Si no hay marcos libres, se realiza un reemplazo.
+
+Este proceso se repite para cada referencia de memoria.
